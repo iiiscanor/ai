@@ -8,8 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Three.js CDN for 3D visual effects -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Tone.js CDN for subtle harmonic audio experience -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <!-- Google Fonts & Google Sans typography CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,10 +45,10 @@
         /* Ambient light dispersion effect */
         .ambient-glow {
             position: absolute;
-            width: 600px;
-            height: 600px;
+            width: 550px;
+            height: 550px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(110, 86, 248, 0.18) 0%, rgba(13, 10, 36, 0.05) 50%, transparent 75%);
+            background: radial-gradient(circle, rgba(110, 86, 248, 0.12) 0%, rgba(13, 10, 36, 0.03) 50%, transparent 75%);
             filter: blur(80px);
             pointer-events: none;
             transform: translate(-50%, -50%);
@@ -59,8 +57,8 @@
 
         /* Dynamic subtle text glow */
         .text-glow {
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.4),
-                         0 0 55px rgba(120, 119, 255, 0.3);
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.35),
+                         0 0 45px rgba(120, 119, 255, 0.22);
             letter-spacing: 0.35em;
         }
 
@@ -118,22 +116,11 @@
     <main class="content-layer w-full h-full flex flex-col items-center justify-between p-8 sm:p-14 select-none">
         
         <!-- Top Status Indicator -->
-        <header class="w-full flex justify-between items-center max-w-6xl">
+        <header class="w-full flex justify-center items-center max-w-6xl">
             <div class="glass-badge interactive-element px-4 py-1.5 rounded-full flex items-center gap-2.5 transition-all duration-300 hover:border-white/20">
                 <span id="status-bulb" class="w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_10px_#a78bfa] pulsing-dot"></span>
                 <span class="text-[11px] uppercase tracking-[0.25em] text-white/70 font-light">In Progress</span>
             </div>
-
-            <!-- Subtle Audio Experience Toggle -->
-            <button id="sound-btn" class="interactive-element glass-badge w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:border-white/30 transition-all duration-300 active:scale-95" title="Toggle Ambient Audio">
-                <svg id="sound-icon-off" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                </svg>
-                <svg id="sound-icon-on" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
-            </button>
         </header>
 
         <!-- Center Coming Soon Minimalist Title -->
@@ -155,15 +142,14 @@
     </main>
 
     <script>
-        // Setup Three.js 3D Scene
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
 
-        // Camera Setup
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 32;
+        // Camera setup calibrated for optimal galactic depth
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 22, 38);
 
-        // Renderer
+        // High-performance WebGL renderer
         const renderer = new THREE.WebGLRenderer({
             canvas: canvas,
             antialias: true,
@@ -173,108 +159,173 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // Color Palettes
-        const themes = {
+        const galaxyThemes = {
             violet: {
-                primary: 0x818cf8,
-                secondary: 0xc084fc,
-                glow: 'rgba(129, 140, 248, 0.22)',
+                core: 0xfff4e6,
+                inner: 0xc084fc,
+                outer: 0x6366f1,
+                nebula: 0x8b5cf6,
+                glow: 'rgba(139, 92, 246, 0.22)',
                 bulbClass: 'bg-violet-400 shadow-[0_0_10px_#a78bfa]'
             },
             cyan: {
-                primary: 0x22d3ee,
-                secondary: 0x38bdf8,
-                glow: 'rgba(34, 211, 238, 0.22)',
+                core: 0xe0f7fa,
+                inner: 0x38bdf8,
+                outer: 0x0284c7,
+                nebula: 0x06b6d4,
+                glow: 'rgba(6, 182, 212, 0.22)',
                 bulbClass: 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]'
             },
             gold: {
-                primary: 0xfbbf24,
-                secondary: 0xf59e0b,
-                glow: 'rgba(251, 191, 36, 0.22)',
+                core: 0xfffae6,
+                inner: 0xfbbf24,
+                outer: 0xd97706,
+                nebula: 0xf59e0b,
+                glow: 'rgba(245, 158, 11, 0.22)',
                 bulbClass: 'bg-amber-400 shadow-[0_0_10px_#fbbf24]'
             },
             emerald: {
-                primary: 0x34d399,
-                secondary: 0x10b981,
-                glow: 'rgba(52, 211, 153, 0.22)',
+                core: 0xecfdf5,
+                inner: 0x34d399,
+                outer: 0x059669,
+                nebula: 0x10b981,
+                glow: 'rgba(16, 185, 129, 0.22)',
                 bulbClass: 'bg-emerald-400 shadow-[0_0_10px_#34d399]'
             }
         };
 
         let currentThemeKey = 'violet';
 
-        // Particle Cosmos Setup
-        const particleCount = 2800;
-        const positions = new Float32Array(particleCount * 3);
-        const originalPositions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-        const scales = new Float32Array(particleCount);
-        const velocities = new Float32Array(particleCount * 3);
+        // Master container for the rotating galaxy
+        const galaxyGroup = new THREE.Group();
+        // Inclined perspective to appreciate the spiral disk and bulge
+        galaxyGroup.rotation.x = Math.PI * 0.28;
+        scene.add(galaxyGroup);
 
-        const color1 = new THREE.Color(themes[currentThemeKey].primary);
-        const color2 = new THREE.Color(themes[currentThemeKey].secondary);
-
-        // Generate sacred geometry / cosmic torus vortex
-        for (let i = 0; i < particleCount; i++) {
-            const i3 = i * 3;
-            // Torus / Vortex parametric formulas
-            const u = Math.random() * Math.PI * 2;
-            const v = Math.random() * Math.PI * 2;
-            const radius = 13 + (Math.random() - 0.5) * 5;
-            const tube = 4.2 + (Math.random() - 0.5) * 3;
-
-            const x = (radius + tube * Math.cos(v)) * Math.cos(u);
-            const y = (radius + tube * Math.cos(v)) * Math.sin(u);
-            const z = tube * Math.sin(v) + (Math.random() - 0.5) * 2.5;
-
-            positions[i3] = x;
-            positions[i3 + 1] = y;
-            positions[i3 + 2] = z;
-
-            originalPositions[i3] = x;
-            originalPositions[i3 + 1] = y;
-            originalPositions[i3 + 2] = z;
-
-            velocities[i3] = (Math.random() - 0.5) * 0.02;
-            velocities[i3 + 1] = (Math.random() - 0.5) * 0.02;
-            velocities[i3 + 2] = (Math.random() - 0.5) * 0.02;
-
-            // Gradient particle coloring
-            const mixedColor = color1.clone().lerp(color2, Math.random());
-            colors[i3] = mixedColor.r;
-            colors[i3 + 1] = mixedColor.g;
-            colors[i3 + 2] = mixedColor.b;
-
-            scales[i] = Math.random() * 1.5 + 0.5;
-        }
-
-        const particleGeometry = new THREE.BufferGeometry();
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        particleGeometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
-
-        // Custom circular soft glow texture generated programmatically
-        function createParticleTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-            gradient.addColorStop(0, 'rgba(255,255,255,1)');
-            gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
-            gradient.addColorStop(0.6, 'rgba(255,255,255,0.15)');
-            gradient.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.fillStyle = gradient;
+        function createStarTexture() {
+            const texCanvas = document.createElement('canvas');
+            texCanvas.width = 64;
+            texCanvas.height = 64;
+            const ctx = texCanvas.getContext('2d');
+            const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            grad.addColorStop(0.2, 'rgba(255, 255, 255, 0.85)');
+            grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.25)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 64, 64);
-
-            const texture = new THREE.Texture(canvas);
+            const texture = new THREE.Texture(texCanvas);
             texture.needsUpdate = true;
             return texture;
         }
 
-        const particleMaterial = new THREE.PointsMaterial({
-            size: 0.65,
-            map: createParticleTexture(),
+        function createNebulaTexture() {
+            const texCanvas = document.createElement('canvas');
+            texCanvas.width = 128;
+            texCanvas.height = 128;
+            const ctx = texCanvas.getContext('2d');
+            const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+            grad.addColorStop(0.35, 'rgba(255, 255, 255, 0.12)');
+            grad.addColorStop(0.7, 'rgba(255, 255, 255, 0.03)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 128, 128);
+            const texture = new THREE.Texture(texCanvas);
+            texture.needsUpdate = true;
+            return texture;
+        }
+
+        const starTexture = createStarTexture();
+        const nebulaTexture = createNebulaTexture();
+
+        const galaxyParams = {
+            starCount: 11000,     // Reduced star density to prevent overcrowding
+            branches: 4,          // 4-armed grand spiral galaxy
+            radius: 26,           // Expansive galactic diameter
+            spin: 1.12,           // Logarithmic spiral twist
+            randomness: 0.26,     // Refined arm dispersion for clean spiral lines
+            power: 1.35,          // Drastically reduced power to eliminate heavy center crowding
+            nebulaCount: 450      // Airy interstellar gas clouds
+        };
+
+        const starPositions = new Float32Array(galaxyParams.starCount * 3);
+        const starColors = new Float32Array(galaxyParams.starCount * 3);
+        const starScales = new Float32Array(galaxyParams.starCount);
+        const starSpeeds = new Float32Array(galaxyParams.starCount);
+
+        const coreColor = new THREE.Color(galaxyThemes[currentThemeKey].core);
+        const innerColor = new THREE.Color(galaxyThemes[currentThemeKey].inner);
+        const outerColor = new THREE.Color(galaxyThemes[currentThemeKey].outer);
+
+        for (let i = 0; i < galaxyParams.starCount; i++) {
+            const i3 = i * 3;
+
+            // Gentle radial dispersion with very low center accumulation
+            const r = Math.pow(Math.random(), galaxyParams.power) * galaxyParams.radius;
+            const isCoreBulge = r < galaxyParams.radius * 0.10 && Math.random() < 0.20; // Minimal central clumping
+
+            if (isCoreBulge) {
+                // Subtle, dispersed galactic bulge
+                const u = Math.random();
+                const v = Math.random();
+                const theta = u * 2.0 * Math.PI;
+                const phi = Math.acos(2.0 * v - 1.0);
+                const bulgeR = Math.pow(Math.random(), 1.2) * (galaxyParams.radius * 0.12);
+
+                starPositions[i3] = bulgeR * Math.sin(phi) * Math.cos(theta);
+                starPositions[i3 + 1] = bulgeR * Math.sin(phi) * Math.sin(theta) * 0.55;
+                starPositions[i3 + 2] = bulgeR * Math.cos(phi);
+
+                // Gentle core star coloring
+                const mixedCore = coreColor.clone().lerp(innerColor, Math.random() * 0.35);
+                starColors[i3] = mixedCore.r;
+                starColors[i3 + 1] = mixedCore.g;
+                starColors[i3 + 2] = mixedCore.b;
+
+                starScales[i] = Math.random() * 1.1 + 0.5;
+                starSpeeds[i] = 0.0015;
+            } else {
+                // Logarithmic spiral arms with airy distribution
+                const branchAngle = ((i % galaxyParams.branches) * 2 * Math.PI) / galaxyParams.branches;
+                const spinAngle = r * galaxyParams.spin;
+
+                const spreadPow = 2.2;
+                const spreadX = Math.pow(Math.random(), spreadPow) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * (r + 1.0);
+                const spreadY = Math.pow(Math.random(), spreadPow) * (Math.random() < 0.5 ? 1 : -1) * 0.09 * (r + 0.8);
+                const spreadZ = Math.pow(Math.random(), spreadPow) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * (r + 1.0);
+
+                const currentAngle = branchAngle + spinAngle;
+                starPositions[i3] = Math.cos(currentAngle) * r + spreadX;
+                starPositions[i3 + 1] = spreadY;
+                starPositions[i3 + 2] = Math.sin(currentAngle) * r + spreadZ;
+
+                const mixRatio = Math.min(Math.max((r - 1.5) / (galaxyParams.radius - 1.5), 0), 1);
+                const mixedArm = innerColor.clone().lerp(outerColor, mixRatio);
+
+                if (Math.random() > 0.88) {
+                    mixedArm.lerp(new THREE.Color(0xa5f3fc), 0.45);
+                } else if (Math.random() < 0.08) {
+                    mixedArm.lerp(new THREE.Color(0xfde68a), 0.4);
+                }
+
+                starColors[i3] = mixedArm.r;
+                starColors[i3 + 1] = mixedArm.g;
+                starColors[i3 + 2] = mixedArm.b;
+
+                starScales[i] = Math.random() * 1.0 + 0.3;
+                starSpeeds[i] = 0.0008;
+            }
+        }
+
+        const starGeometry = new THREE.BufferGeometry();
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+        starGeometry.setAttribute('scale', new THREE.BufferAttribute(starScales, 1));
+
+        const starMaterial = new THREE.PointsMaterial({
+            size: 0.38,
+            map: starTexture,
             vertexColors: true,
             transparent: true,
             blending: THREE.AdditiveBlending,
@@ -282,122 +333,105 @@
             opacity: 0.85
         });
 
-        const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particleSystem);
+        const galaxyStars = new THREE.Points(starGeometry, starMaterial);
+        galaxyGroup.add(galaxyStars);
 
-        // Ethereal subtle floating orbital rings
-        const ringGeo = new THREE.TorusGeometry(14, 0.035, 16, 120);
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: themes.violet.primary,
-            transparent: true,
-            opacity: 0.18,
-            wireframe: true
-        });
-        const ring1 = new THREE.Mesh(ringGeo, ringMat);
-        ring1.rotation.x = Math.PI * 0.35;
-        scene.add(ring1);
+        // Volumetric Interstellar Nebula Clouds
+        const nebulaPositions = new Float32Array(galaxyParams.nebulaCount * 3);
+        const nebulaColors = new Float32Array(galaxyParams.nebulaCount * 3);
+        const nebulaThemeColor = new THREE.Color(galaxyThemes[currentThemeKey].nebula);
 
-        const ring2 = new THREE.Mesh(
-            new THREE.TorusGeometry(17, 0.02, 16, 120),
-            ringMat.clone()
-        );
-        ring2.rotation.y = Math.PI * 0.45;
-        ring2.material.opacity = 0.1;
-        scene.add(ring2);
+        for (let j = 0; j < galaxyParams.nebulaCount; j++) {
+            const j3 = j * 3;
+            const r = Math.pow(Math.random(), 1.6) * (galaxyParams.radius * 0.92);
+            const branchAngle = ((j % galaxyParams.branches) * 2 * Math.PI) / galaxyParams.branches;
+            const spinAngle = r * galaxyParams.spin;
+            const spread = (Math.random() - 0.5) * 2.2;
 
-        // Mouse and interactive parallax coordinates
-        const mouse = { x: 0, y: 0, targetX: 0, targetY: 0, isInteracting: false };
-        const raycaster = new THREE.Raycaster();
-        const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-        const planeIntersect = new THREE.Vector3();
+            const angle = branchAngle + spinAngle;
+            nebulaPositions[j3] = Math.cos(angle) * r + spread;
+            nebulaPositions[j3 + 1] = (Math.random() - 0.5) * 0.9;
+            nebulaPositions[j3 + 2] = Math.sin(angle) * r + spread;
 
-        const ambientOrb = document.getElementById('ambient-orb');
-
-        // Audio System via Tone.js
-        let audioInitialized = false;
-        let isAudioPlaying = false;
-        let ambientSynth, filter, lfo;
-
-        function initAudio() {
-            if (audioInitialized) return;
-            try {
-                // Harmonic ambient pad synth
-                filter = new Tone.Filter({
-                    frequency: 600,
-                    type: "lowpass",
-                    rolloff: -24
-                }).toDestination();
-
-                ambientSynth = new Tone.PolySynth(Tone.Synth, {
-                    oscillator: { type: "sine" },
-                    envelope: {
-                        attack: 2.5,
-                        decay: 3.0,
-                        sustain: 0.7,
-                        release: 4.0
-                    },
-                    volume: -20
-                }).connect(filter);
-
-                // Subtle LFO sweep
-                lfo = new Tone.LFO(0.08, 300, 1200).connect(filter.frequency);
-                lfo.start();
-
-                audioInitialized = true;
-            } catch (e) {
-                console.warn('Audio initialization deferred:', e);
-            }
+            const nebCol = nebulaThemeColor.clone().lerp(outerColor, Math.random() * 0.5);
+            nebulaColors[j3] = nebCol.r;
+            nebulaColors[j3 + 1] = nebCol.g;
+            nebulaColors[j3 + 2] = nebCol.b;
         }
 
-        // Toggle Audio Button
-        const soundBtn = document.getElementById('sound-btn');
-        const soundIconOff = document.getElementById('sound-icon-off');
-        const soundIconOn = document.getElementById('sound-icon-on');
+        const nebulaGeometry = new THREE.BufferGeometry();
+        nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
+        nebulaGeometry.setAttribute('color', new THREE.BufferAttribute(nebulaColors, 3));
 
-        soundBtn.addEventListener('click', async () => {
-            if (!audioInitialized) {
-                await Tone.start();
-                initAudio();
-            }
-
-            if (!isAudioPlaying) {
-                // Play gentle ambient chord: D minor 9th (peaceful, ethereal)
-                ambientSynth.triggerAttack(['D3', 'A3', 'C4', 'E4', 'F4']);
-                soundIconOff.classList.add('hidden');
-                soundIconOn.classList.remove('hidden');
-                soundBtn.classList.add('border-white/40', 'bg-white/10');
-                isAudioPlaying = true;
-            } else {
-                ambientSynth.releaseAll();
-                soundIconOff.classList.remove('hidden');
-                soundIconOn.classList.add('hidden');
-                soundBtn.classList.remove('border-white/40', 'bg-white/10');
-                isAudioPlaying = false;
-            }
+        const nebulaMaterial = new THREE.PointsMaterial({
+            size: 4.2,
+            map: nebulaTexture,
+            vertexColors: true,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            opacity: 0.16
         });
 
-        // Interaction listeners
+        const galaxyNebulas = new THREE.Points(nebulaGeometry, nebulaMaterial);
+        galaxyGroup.add(galaxyNebulas);
+
+        const backgroundCount = 1200;
+        const bgPositions = new Float32Array(backgroundCount * 3);
+        for (let k = 0; k < backgroundCount * 3; k += 3) {
+            const u = Math.random();
+            const v = Math.random();
+            const theta = u * 2.0 * Math.PI;
+            const phi = Math.acos(2.0 * v - 1.0);
+            const r = 120 + Math.random() * 60;
+
+            bgPositions[k] = r * Math.sin(phi) * Math.cos(theta);
+            bgPositions[k + 1] = r * Math.sin(phi) * Math.sin(theta);
+            bgPositions[k + 2] = r * Math.cos(phi);
+        }
+
+        const bgGeometry = new THREE.BufferGeometry();
+        bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
+        const bgMaterial = new THREE.PointsMaterial({
+            size: 0.35,
+            color: 0x8892b0,
+            transparent: true,
+            opacity: 0.5,
+            map: starTexture,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+        const starfield = new THREE.Points(bgGeometry, bgMaterial);
+        scene.add(starfield);
+
+        // Core Accretion Halo Ring
+        const coreHaloGeo = new THREE.RingGeometry(0.8, 4.2, 64);
+        const coreHaloMat = new THREE.MeshBasicMaterial({
+            color: galaxyThemes.violet.inner,
+            transparent: true,
+            opacity: 0.12,
+            side: THREE.DoubleSide,
+            blending: THREE.AdditiveBlending
+        });
+        const coreHalo = new THREE.Mesh(coreHaloGeo, coreHaloMat);
+        coreHalo.rotation.x = Math.PI / 2;
+        galaxyGroup.add(coreHalo);
+
+        const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+        const ambientOrb = document.getElementById('ambient-orb');
+
         function updatePointer(clientX, clientY) {
             mouse.targetX = (clientX / window.innerWidth) * 2 - 1;
             mouse.targetY = -(clientY / window.innerHeight) * 2 + 1;
-
-            // Ambient background glow tracking
             ambientOrb.style.left = `${clientX}px`;
             ambientOrb.style.top = `${clientY}px`;
         }
 
-        window.addEventListener('mousemove', (e) => {
-            updatePointer(e.clientX, e.clientY);
-        });
-
-        // Touch support for mobile devices
+        window.addEventListener('mousemove', (e) => updatePointer(e.clientX, e.clientY));
         window.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                updatePointer(e.touches[0].clientX, e.touches[0].clientY);
-            }
+            if (e.touches.length > 0) updatePointer(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: true });
 
-        // Responsive Window Resize Handling
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -405,18 +439,15 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         });
 
-        // Theme button click listeners
         const themeBtns = document.querySelectorAll('.theme-btn');
         const statusBulb = document.getElementById('status-bulb');
 
         themeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const themeKey = btn.dataset.theme;
-                if (!themes[themeKey]) return;
-
+                if (!galaxyThemes[themeKey]) return;
                 currentThemeKey = themeKey;
 
-                // Update active state
                 themeBtns.forEach(b => {
                     b.classList.remove('ring-2', 'ring-white/50');
                     b.classList.add('opacity-60');
@@ -424,68 +455,73 @@
                 btn.classList.remove('opacity-60');
                 btn.classList.add('ring-2', 'ring-white/50');
 
-                // Update bulb & ambient orb
-                statusBulb.className = `w-2 h-2 rounded-full pulsing-dot ${themes[themeKey].bulbClass}`;
-                ambientOrb.style.background = `radial-gradient(circle, ${themes[themeKey].glow} 0%, rgba(13, 10, 36, 0.05) 50%, transparent 75%)`;
+                statusBulb.className = `w-2 h-2 rounded-full pulsing-dot ${galaxyThemes[themeKey].bulbClass}`;
+                ambientOrb.style.background = `radial-gradient(circle, ${galaxyThemes[themeKey].glow} 0%, rgba(13, 10, 36, 0.05) 50%, transparent 75%)`;
 
-                // Update ring & particle colors smoothly
-                const newC1 = new THREE.Color(themes[themeKey].primary);
-                const newC2 = new THREE.Color(themes[themeKey].secondary);
-                ring1.material.color.set(newC1);
-                ring2.material.color.set(newC2);
+                const newCore = new THREE.Color(galaxyThemes[themeKey].core);
+                const newInner = new THREE.Color(galaxyThemes[themeKey].inner);
+                const newOuter = new THREE.Color(galaxyThemes[themeKey].outer);
+                const newNebula = new THREE.Color(galaxyThemes[themeKey].nebula);
 
-                const colorAttr = particleGeometry.attributes.color;
-                for (let i = 0; i < particleCount; i++) {
+                coreHaloMat.color.set(newInner);
+
+                // Update galaxy star colors smoothly
+                const colorAttr = starGeometry.attributes.color;
+                for (let i = 0; i < galaxyParams.starCount; i++) {
                     const i3 = i * 3;
-                    const mixed = newC1.clone().lerp(newC2, Math.random());
+                    const r = Math.sqrt(starPositions[i3] ** 2 + starPositions[i3 + 2] ** 2);
+                    const mixRatio = Math.min(Math.max((r - 1.5) / (galaxyParams.radius - 1.5), 0), 1);
+                    const mixed = r < 3.2 ? newCore.clone().lerp(newInner, r / 3.2) : newInner.clone().lerp(newOuter, mixRatio);
                     colorAttr.array[i3] = mixed.r;
                     colorAttr.array[i3 + 1] = mixed.g;
                     colorAttr.array[i3 + 2] = mixed.b;
                 }
                 colorAttr.needsUpdate = true;
+
+                // Update nebula gas clouds
+                const nebColorAttr = nebulaGeometry.attributes.color;
+                for (let j = 0; j < galaxyParams.nebulaCount; j++) {
+                    const j3 = j * 3;
+                    const mixedNeb = newNebula.clone().lerp(newOuter, Math.random() * 0.5);
+                    nebColorAttr.array[j3] = mixedNeb.r;
+                    nebColorAttr.array[j3 + 1] = mixedNeb.g;
+                    nebColorAttr.array[j3 + 2] = mixedNeb.b;
+                }
+                nebColorAttr.needsUpdate = true;
             });
         });
 
-        // Main Animation Loop
         const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
-
             const elapsedTime = clock.getElapsedTime();
 
-            // Smooth mouse interpolation
-            mouse.x += (mouse.targetX - mouse.x) * 0.045;
-            mouse.y += (mouse.targetY - mouse.y) * 0.045;
+            // Smooth mouse interpolation for 3D parallax
+            mouse.x += (mouse.targetX - mouse.x) * 0.04;
+            mouse.y += (mouse.targetY - mouse.y) * 0.04;
 
-            // Rotate particle system slowly
-            particleSystem.rotation.y = elapsedTime * 0.08 + mouse.x * 0.45;
-            particleSystem.rotation.x = Math.sin(elapsedTime * 0.05) * 0.2 + mouse.y * 0.35;
+            // Grand spiral galaxy continuous rotation
+            galaxyGroup.rotation.y = elapsedTime * 0.055;
 
-            // Rotate orbital rings in complementary directions
-            ring1.rotation.z = elapsedTime * 0.05;
-            ring1.rotation.y = elapsedTime * 0.03 + mouse.x * 0.2;
-            ring2.rotation.z = -elapsedTime * 0.04;
-            ring2.rotation.x = Math.PI * 0.45 + mouse.y * 0.2;
+            // Interactive galaxy tilt following cursor
+            galaxyGroup.rotation.x = Math.PI * 0.28 + mouse.y * 0.25;
+            galaxyGroup.rotation.z = mouse.x * 0.2;
 
-            // Camera subtle floating parallax
-            camera.position.x = mouse.x * 2.5;
-            camera.position.y = mouse.y * 2.5;
+            // Pulsing galactic core accretion halo
+            coreHalo.scale.setScalar(1 + Math.sin(elapsedTime * 1.8) * 0.06);
+
+            // Subtle camera drifting and tracking
+            camera.position.x = mouse.x * 3.5;
+            camera.position.y = 22 + mouse.y * 2.5;
             camera.lookAt(0, 0, 0);
 
-            // Subtle particle breathing wave effect
-            const pos = particleGeometry.attributes.position.array;
-            for (let i = 0; i < particleCount; i += 4) {
-                const i3 = i * 3;
-                const wave = Math.sin(elapsedTime * 1.5 + originalPositions[i3] * 0.2) * 0.4;
-                pos[i3 + 2] = originalPositions[i3 + 2] + wave;
-            }
-            particleGeometry.attributes.position.needsUpdate = true;
+            // Very slow drift for deep starfield
+            starfield.rotation.y = -elapsedTime * 0.008;
 
             renderer.render(scene, camera);
         }
 
-        // Start animation once DOM is ready
         window.addEventListener('load', () => {
             animate();
         });
