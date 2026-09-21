@@ -115,10 +115,10 @@
     <!-- Minimalist Content Overlay -->
     <main class="content-layer w-full h-full flex flex-col items-center justify-between p-8 sm:p-14 select-none">
         
-        <!-- Top Status Indicator -->
-        <header class="w-full flex justify-center items-center max-w-6xl">
+        <!-- Top Status Indicator (Repositioned to the far left) -->
+        <header class="w-full flex justify-start items-center">
             <div class="glass-badge interactive-element px-4 py-1.5 rounded-full flex items-center gap-2.5 transition-all duration-300 hover:border-white/20">
-                <span id="status-bulb" class="w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_10px_#a78bfa] pulsing-dot"></span>
+                <span id="status-bulb" class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_12px_#f43f5e] pulsing-dot transition-all duration-700"></span>
                 <span class="text-[11px] uppercase tracking-[0.25em] text-white/70 font-light">In Progress</span>
             </div>
         </header>
@@ -130,13 +130,17 @@
             </h1>
         </div>
 
-        <!-- Footer Palette Switcher to customize ambient mood -->
+        <!-- Dynamic 7-Color Rainbow Spectrum Indicator (Automatic, hands-free cycle) -->
         <footer class="w-full flex justify-center items-center">
-            <div class="glass-badge interactive-element px-3 py-2 rounded-full flex items-center gap-3">
-                <button data-theme="violet" class="theme-btn w-3.5 h-3.5 rounded-full bg-indigo-500 ring-2 ring-white/50 transition-all hover:scale-125" title="Cosmic Nebula"></button>
-                <button data-theme="cyan" class="theme-btn w-3.5 h-3.5 rounded-full bg-cyan-400 opacity-60 transition-all hover:scale-125" title="Cyber Cyan"></button>
-                <button data-theme="gold" class="theme-btn w-3.5 h-3.5 rounded-full bg-amber-400 opacity-60 transition-all hover:scale-125" title="Solar Gold"></button>
-                <button data-theme="emerald" class="theme-btn w-3.5 h-3.5 rounded-full bg-emerald-400 opacity-60 transition-all hover:scale-125" title="Ethereal Green"></button>
+            <div class="glass-badge interactive-element px-4 py-2 rounded-full flex items-center gap-3">
+                <span class="text-[10px] uppercase tracking-[0.25em] text-white/40 mr-1 hidden sm:inline font-light">Spectrum</span>
+                <span data-color-idx="0" class="spectrum-dot w-2 h-2 rounded-full bg-rose-500 transition-all duration-700 scale-125 opacity-100 shadow-[0_0_8px_#f43f5e]"></span>
+                <span data-color-idx="1" class="spectrum-dot w-2 h-2 rounded-full bg-orange-500 transition-all duration-700 opacity-30"></span>
+                <span data-color-idx="2" class="spectrum-dot w-2 h-2 rounded-full bg-amber-400 transition-all duration-700 opacity-30"></span>
+                <span data-color-idx="3" class="spectrum-dot w-2 h-2 rounded-full bg-emerald-400 transition-all duration-700 opacity-30"></span>
+                <span data-color-idx="4" class="spectrum-dot w-2 h-2 rounded-full bg-cyan-400 transition-all duration-700 opacity-30"></span>
+                <span data-color-idx="5" class="spectrum-dot w-2 h-2 rounded-full bg-indigo-400 transition-all duration-700 opacity-30"></span>
+                <span data-color-idx="6" class="spectrum-dot w-2 h-2 rounded-full bg-purple-400 transition-all duration-700 opacity-30"></span>
             </div>
         </footer>
     </main>
@@ -144,10 +148,11 @@
     <script>
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030307, 0.016);
 
-        // Camera setup calibrated for optimal galactic depth
+        // Camera setup oriented directly inside the starry mist
         const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 22, 38);
+        camera.position.set(0, 0, 32);
 
         // High-performance WebGL renderer
         const renderer = new THREE.WebGLRenderer({
@@ -159,48 +164,65 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        const galaxyThemes = {
-            violet: {
-                core: 0xfff4e6,
-                inner: 0xc084fc,
-                outer: 0x6366f1,
-                nebula: 0x8b5cf6,
-                glow: 'rgba(139, 92, 246, 0.22)',
-                bulbClass: 'bg-violet-400 shadow-[0_0_10px_#a78bfa]'
+        // 7 Rainbow Spectrum Colors: Red, Orange, Yellow, Green, Cyan, Indigo, Violet
+        const rainbowThemes = [
+            { 
+                name: 'Red',
+                fogDense: new THREE.Color(0xdc2626),
+                fogMist: new THREE.Color(0x881337),
+                starColor: new THREE.Color(0xffe4e6),
+                hex: '#f43f5e',
+                glow: 'rgba(244, 63, 94, 0.20)'
             },
-            cyan: {
-                core: 0xe0f7fa,
-                inner: 0x38bdf8,
-                outer: 0x0284c7,
-                nebula: 0x06b6d4,
-                glow: 'rgba(6, 182, 212, 0.22)',
-                bulbClass: 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]'
+            { 
+                name: 'Orange',
+                fogDense: new THREE.Color(0xea580c),
+                fogMist: new THREE.Color(0x7c2d12),
+                starColor: new THREE.Color(0xffedd5),
+                hex: '#f97316',
+                glow: 'rgba(249, 115, 22, 0.20)'
             },
-            gold: {
-                core: 0xfffae6,
-                inner: 0xfbbf24,
-                outer: 0xd97706,
-                nebula: 0xf59e0b,
-                glow: 'rgba(245, 158, 11, 0.22)',
-                bulbClass: 'bg-amber-400 shadow-[0_0_10px_#fbbf24]'
+            { 
+                name: 'Yellow',
+                fogDense: new THREE.Color(0xd97706),
+                fogMist: new THREE.Color(0x78350f),
+                starColor: new THREE.Color(0xfef9c3),
+                hex: '#facc15',
+                glow: 'rgba(250, 204, 21, 0.20)'
             },
-            emerald: {
-                core: 0xecfdf5,
-                inner: 0x34d399,
-                outer: 0x059669,
-                nebula: 0x10b981,
-                glow: 'rgba(16, 185, 129, 0.22)',
-                bulbClass: 'bg-emerald-400 shadow-[0_0_10px_#34d399]'
+            { 
+                name: 'Green',
+                fogDense: new THREE.Color(0x10b981),
+                fogMist: new THREE.Color(0x064e3b),
+                starColor: new THREE.Color(0xd1fae5),
+                hex: '#34d399',
+                glow: 'rgba(52, 211, 153, 0.20)'
+            },
+            { 
+                name: 'Cyan',
+                fogDense: new THREE.Color(0x06b6d4),
+                fogMist: new THREE.Color(0x0e7490),
+                starColor: new THREE.Color(0xcffafe),
+                hex: '#22d3ee',
+                glow: 'rgba(34, 211, 238, 0.20)'
+            },
+            { 
+                name: 'Indigo',
+                fogDense: new THREE.Color(0x6366f1),
+                fogMist: new THREE.Color(0x312e81),
+                starColor: new THREE.Color(0xe0e7ff),
+                hex: '#6366f1',
+                glow: 'rgba(99, 102, 241, 0.20)'
+            },
+            { 
+                name: 'Violet',
+                fogDense: new THREE.Color(0xa855f7),
+                fogMist: new THREE.Color(0x581c87),
+                starColor: new THREE.Color(0xf3e8ff),
+                hex: '#c084fc',
+                glow: 'rgba(192, 132, 252, 0.20)'
             }
-        };
-
-        let currentThemeKey = 'violet';
-
-        // Master container for the rotating galaxy
-        const galaxyGroup = new THREE.Group();
-        // Inclined perspective to appreciate the spiral disk and bulge
-        galaxyGroup.rotation.x = Math.PI * 0.28;
-        scene.add(galaxyGroup);
+        ];
 
         function createStarTexture() {
             const texCanvas = document.createElement('canvas');
@@ -209,8 +231,8 @@
             const ctx = texCanvas.getContext('2d');
             const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
             grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            grad.addColorStop(0.2, 'rgba(255, 255, 255, 0.85)');
-            grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.25)');
+            grad.addColorStop(0.18, 'rgba(255, 255, 255, 0.85)');
+            grad.addColorStop(0.55, 'rgba(255, 255, 255, 0.25)');
             grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 64, 64);
@@ -219,206 +241,120 @@
             return texture;
         }
 
-        function createNebulaTexture() {
+        // Procedural soft cloud puff texture with multi-layered organic dissipation
+        function createFogTexture() {
             const texCanvas = document.createElement('canvas');
-            texCanvas.width = 128;
-            texCanvas.height = 128;
+            texCanvas.width = 256;
+            texCanvas.height = 256;
             const ctx = texCanvas.getContext('2d');
-            const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-            grad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
-            grad.addColorStop(0.35, 'rgba(255, 255, 255, 0.12)');
-            grad.addColorStop(0.7, 'rgba(255, 255, 255, 0.03)');
-            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 128, 128);
+
+            ctx.clearRect(0, 0, 256, 256);
+
+            // Primary diffuse gradient
+            const grad1 = ctx.createRadialGradient(128, 128, 8, 128, 128, 120);
+            grad1.addColorStop(0, 'rgba(255, 255, 255, 0.40)');
+            grad1.addColorStop(0.35, 'rgba(255, 255, 255, 0.18)');
+            grad1.addColorStop(0.7, 'rgba(255, 255, 255, 0.04)');
+            grad1.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = grad1;
+            ctx.fillRect(0, 0, 256, 256);
+
+            // Secondary softer offset lobe for wispy, smoky asymmetry
+            const grad2 = ctx.createRadialGradient(105, 115, 6, 105, 115, 95);
+            grad2.addColorStop(0, 'rgba(255, 255, 255, 0.16)');
+            grad2.addColorStop(0.6, 'rgba(255, 255, 255, 0.03)');
+            grad2.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = grad2;
+            ctx.fillRect(0, 0, 256, 256);
+
             const texture = new THREE.Texture(texCanvas);
             texture.needsUpdate = true;
             return texture;
         }
 
         const starTexture = createStarTexture();
-        const nebulaTexture = createNebulaTexture();
+        const fogTexture = createFogTexture();
 
-        const galaxyParams = {
-            starCount: 11000,     // Reduced star density to prevent overcrowding
-            branches: 4,          // 4-armed grand spiral galaxy
-            radius: 26,           // Expansive galactic diameter
-            spin: 1.12,           // Logarithmic spiral twist
-            randomness: 0.26,     // Refined arm dispersion for clean spiral lines
-            power: 1.35,          // Drastically reduced power to eliminate heavy center crowding
-            nebulaCount: 450      // Airy interstellar gas clouds
-        };
+        const fogGroup = new THREE.Group();
+        scene.add(fogGroup);
 
-        const starPositions = new Float32Array(galaxyParams.starCount * 3);
-        const starColors = new Float32Array(galaxyParams.starCount * 3);
-        const starScales = new Float32Array(galaxyParams.starCount);
-        const starSpeeds = new Float32Array(galaxyParams.starCount);
+        // Volumetric mist puffs drifting through space
+        const fogPuffCount = 380;
+        const fogPositions = new Float32Array(fogPuffCount * 3);
+        const fogColors = new Float32Array(fogPuffCount * 3);
+        const fogMixes = new Float32Array(fogPuffCount);
+        const fogVelocities = new Float32Array(fogPuffCount * 3);
 
-        const coreColor = new THREE.Color(galaxyThemes[currentThemeKey].core);
-        const innerColor = new THREE.Color(galaxyThemes[currentThemeKey].inner);
-        const outerColor = new THREE.Color(galaxyThemes[currentThemeKey].outer);
+        for (let f = 0; f < fogPuffCount; f++) {
+            const f3 = f * 3;
+            // Spread across a broad panoramic cloud volume
+            fogPositions[f3] = (Math.random() - 0.5) * 85;
+            fogPositions[f3 + 1] = (Math.random() - 0.5) * 55;
+            fogPositions[f3 + 2] = (Math.random() - 0.5) * 55 - 5;
 
-        for (let i = 0; i < galaxyParams.starCount; i++) {
-            const i3 = i * 3;
+            // Gentle micro-current velocities for natural fog drifting
+            fogVelocities[f3] = (Math.random() - 0.5) * 0.008;
+            fogVelocities[f3 + 1] = (Math.random() - 0.5) * 0.006;
+            fogVelocities[f3 + 2] = (Math.random() - 0.5) * 0.005;
 
-            // Gentle radial dispersion with very low center accumulation
-            const r = Math.pow(Math.random(), galaxyParams.power) * galaxyParams.radius;
-            const isCoreBulge = r < galaxyParams.radius * 0.10 && Math.random() < 0.20; // Minimal central clumping
+            fogMixes[f] = Math.random();
+        }
 
-            if (isCoreBulge) {
-                // Subtle, dispersed galactic bulge
-                const u = Math.random();
-                const v = Math.random();
-                const theta = u * 2.0 * Math.PI;
-                const phi = Math.acos(2.0 * v - 1.0);
-                const bulgeR = Math.pow(Math.random(), 1.2) * (galaxyParams.radius * 0.12);
+        const fogGeometry = new THREE.BufferGeometry();
+        fogGeometry.setAttribute('position', new THREE.BufferAttribute(fogPositions, 3));
+        fogGeometry.setAttribute('color', new THREE.BufferAttribute(fogColors, 3));
 
-                starPositions[i3] = bulgeR * Math.sin(phi) * Math.cos(theta);
-                starPositions[i3 + 1] = bulgeR * Math.sin(phi) * Math.sin(theta) * 0.55;
-                starPositions[i3 + 2] = bulgeR * Math.cos(phi);
+        const fogMaterial = new THREE.PointsMaterial({
+            size: 26,
+            map: fogTexture,
+            vertexColors: true,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            opacity: 0.22
+        });
 
-                // Gentle core star coloring
-                const mixedCore = coreColor.clone().lerp(innerColor, Math.random() * 0.35);
-                starColors[i3] = mixedCore.r;
-                starColors[i3 + 1] = mixedCore.g;
-                starColors[i3 + 2] = mixedCore.b;
+        const fogSystem = new THREE.Points(fogGeometry, fogMaterial);
+        fogGroup.add(fogSystem);
 
-                starScales[i] = Math.random() * 1.1 + 0.5;
-                starSpeeds[i] = 0.0015;
-            } else {
-                // Logarithmic spiral arms with airy distribution
-                const branchAngle = ((i % galaxyParams.branches) * 2 * Math.PI) / galaxyParams.branches;
-                const spinAngle = r * galaxyParams.spin;
+        const starCount = 3800;
+        const starPositions = new Float32Array(starCount * 3);
+        const starColors = new Float32Array(starCount * 3);
+        const starBaseScales = new Float32Array(starCount);
+        const starPhases = new Float32Array(starCount);
 
-                const spreadPow = 2.2;
-                const spreadX = Math.pow(Math.random(), spreadPow) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * (r + 1.0);
-                const spreadY = Math.pow(Math.random(), spreadPow) * (Math.random() < 0.5 ? 1 : -1) * 0.09 * (r + 0.8);
-                const spreadZ = Math.pow(Math.random(), spreadPow) * (Math.random() < 0.5 ? 1 : -1) * galaxyParams.randomness * (r + 1.0);
+        for (let s = 0; s < starCount; s++) {
+            const s3 = s * 3;
+            // Disperse stars seamlessly throughout the fog volume and background
+            starPositions[s3] = (Math.random() - 0.5) * 110;
+            starPositions[s3 + 1] = (Math.random() - 0.5) * 80;
+            starPositions[s3 + 2] = (Math.random() - 0.5) * 90 - 15;
 
-                const currentAngle = branchAngle + spinAngle;
-                starPositions[i3] = Math.cos(currentAngle) * r + spreadX;
-                starPositions[i3 + 1] = spreadY;
-                starPositions[i3 + 2] = Math.sin(currentAngle) * r + spreadZ;
-
-                const mixRatio = Math.min(Math.max((r - 1.5) / (galaxyParams.radius - 1.5), 0), 1);
-                const mixedArm = innerColor.clone().lerp(outerColor, mixRatio);
-
-                if (Math.random() > 0.88) {
-                    mixedArm.lerp(new THREE.Color(0xa5f3fc), 0.45);
-                } else if (Math.random() < 0.08) {
-                    mixedArm.lerp(new THREE.Color(0xfde68a), 0.4);
-                }
-
-                starColors[i3] = mixedArm.r;
-                starColors[i3 + 1] = mixedArm.g;
-                starColors[i3 + 2] = mixedArm.b;
-
-                starScales[i] = Math.random() * 1.0 + 0.3;
-                starSpeeds[i] = 0.0008;
-            }
+            starBaseScales[s] = Math.random() * 0.65 + 0.25;
+            starPhases[s] = Math.random() * Math.PI * 2;
         }
 
         const starGeometry = new THREE.BufferGeometry();
         starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
         starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
-        starGeometry.setAttribute('scale', new THREE.BufferAttribute(starScales, 1));
 
         const starMaterial = new THREE.PointsMaterial({
-            size: 0.38,
+            size: 0.52,
             map: starTexture,
             vertexColors: true,
             transparent: true,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
-            opacity: 0.85
+            opacity: 0.88
         });
 
-        const galaxyStars = new THREE.Points(starGeometry, starMaterial);
-        galaxyGroup.add(galaxyStars);
-
-        // Volumetric Interstellar Nebula Clouds
-        const nebulaPositions = new Float32Array(galaxyParams.nebulaCount * 3);
-        const nebulaColors = new Float32Array(galaxyParams.nebulaCount * 3);
-        const nebulaThemeColor = new THREE.Color(galaxyThemes[currentThemeKey].nebula);
-
-        for (let j = 0; j < galaxyParams.nebulaCount; j++) {
-            const j3 = j * 3;
-            const r = Math.pow(Math.random(), 1.6) * (galaxyParams.radius * 0.92);
-            const branchAngle = ((j % galaxyParams.branches) * 2 * Math.PI) / galaxyParams.branches;
-            const spinAngle = r * galaxyParams.spin;
-            const spread = (Math.random() - 0.5) * 2.2;
-
-            const angle = branchAngle + spinAngle;
-            nebulaPositions[j3] = Math.cos(angle) * r + spread;
-            nebulaPositions[j3 + 1] = (Math.random() - 0.5) * 0.9;
-            nebulaPositions[j3 + 2] = Math.sin(angle) * r + spread;
-
-            const nebCol = nebulaThemeColor.clone().lerp(outerColor, Math.random() * 0.5);
-            nebulaColors[j3] = nebCol.r;
-            nebulaColors[j3 + 1] = nebCol.g;
-            nebulaColors[j3 + 2] = nebCol.b;
-        }
-
-        const nebulaGeometry = new THREE.BufferGeometry();
-        nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(nebulaPositions, 3));
-        nebulaGeometry.setAttribute('color', new THREE.BufferAttribute(nebulaColors, 3));
-
-        const nebulaMaterial = new THREE.PointsMaterial({
-            size: 4.2,
-            map: nebulaTexture,
-            vertexColors: true,
-            transparent: true,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-            opacity: 0.16
-        });
-
-        const galaxyNebulas = new THREE.Points(nebulaGeometry, nebulaMaterial);
-        galaxyGroup.add(galaxyNebulas);
-
-        const backgroundCount = 1200;
-        const bgPositions = new Float32Array(backgroundCount * 3);
-        for (let k = 0; k < backgroundCount * 3; k += 3) {
-            const u = Math.random();
-            const v = Math.random();
-            const theta = u * 2.0 * Math.PI;
-            const phi = Math.acos(2.0 * v - 1.0);
-            const r = 120 + Math.random() * 60;
-
-            bgPositions[k] = r * Math.sin(phi) * Math.cos(theta);
-            bgPositions[k + 1] = r * Math.sin(phi) * Math.sin(theta);
-            bgPositions[k + 2] = r * Math.cos(phi);
-        }
-
-        const bgGeometry = new THREE.BufferGeometry();
-        bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
-        const bgMaterial = new THREE.PointsMaterial({
-            size: 0.35,
-            color: 0x8892b0,
-            transparent: true,
-            opacity: 0.5,
-            map: starTexture,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-        });
-        const starfield = new THREE.Points(bgGeometry, bgMaterial);
-        scene.add(starfield);
-
-        // Core Accretion Halo Ring
-        const coreHaloGeo = new THREE.RingGeometry(0.8, 4.2, 64);
-        const coreHaloMat = new THREE.MeshBasicMaterial({
-            color: galaxyThemes.violet.inner,
-            transparent: true,
-            opacity: 0.12,
-            side: THREE.DoubleSide,
-            blending: THREE.AdditiveBlending
-        });
-        const coreHalo = new THREE.Mesh(coreHaloGeo, coreHaloMat);
-        coreHalo.rotation.x = Math.PI / 2;
-        galaxyGroup.add(coreHalo);
+        const starSystem = new THREE.Points(starGeometry, starMaterial);
+        fogGroup.add(starSystem);
 
         const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
         const ambientOrb = document.getElementById('ambient-orb');
+        const statusBulb = document.getElementById('status-bulb');
+        const spectrumDots = document.querySelectorAll('.spectrum-dot');
 
         function updatePointer(clientX, clientY) {
             mouse.targetX = (clientX / window.innerWidth) * 2 - 1;
@@ -439,85 +375,97 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         });
 
-        const themeBtns = document.querySelectorAll('.theme-btn');
-        const statusBulb = document.getElementById('status-bulb');
-
-        themeBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const themeKey = btn.dataset.theme;
-                if (!galaxyThemes[themeKey]) return;
-                currentThemeKey = themeKey;
-
-                themeBtns.forEach(b => {
-                    b.classList.remove('ring-2', 'ring-white/50');
-                    b.classList.add('opacity-60');
-                });
-                btn.classList.remove('opacity-60');
-                btn.classList.add('ring-2', 'ring-white/50');
-
-                statusBulb.className = `w-2 h-2 rounded-full pulsing-dot ${galaxyThemes[themeKey].bulbClass}`;
-                ambientOrb.style.background = `radial-gradient(circle, ${galaxyThemes[themeKey].glow} 0%, rgba(13, 10, 36, 0.05) 50%, transparent 75%)`;
-
-                const newCore = new THREE.Color(galaxyThemes[themeKey].core);
-                const newInner = new THREE.Color(galaxyThemes[themeKey].inner);
-                const newOuter = new THREE.Color(galaxyThemes[themeKey].outer);
-                const newNebula = new THREE.Color(galaxyThemes[themeKey].nebula);
-
-                coreHaloMat.color.set(newInner);
-
-                // Update galaxy star colors smoothly
-                const colorAttr = starGeometry.attributes.color;
-                for (let i = 0; i < galaxyParams.starCount; i++) {
-                    const i3 = i * 3;
-                    const r = Math.sqrt(starPositions[i3] ** 2 + starPositions[i3 + 2] ** 2);
-                    const mixRatio = Math.min(Math.max((r - 1.5) / (galaxyParams.radius - 1.5), 0), 1);
-                    const mixed = r < 3.2 ? newCore.clone().lerp(newInner, r / 3.2) : newInner.clone().lerp(newOuter, mixRatio);
-                    colorAttr.array[i3] = mixed.r;
-                    colorAttr.array[i3 + 1] = mixed.g;
-                    colorAttr.array[i3 + 2] = mixed.b;
-                }
-                colorAttr.needsUpdate = true;
-
-                // Update nebula gas clouds
-                const nebColorAttr = nebulaGeometry.attributes.color;
-                for (let j = 0; j < galaxyParams.nebulaCount; j++) {
-                    const j3 = j * 3;
-                    const mixedNeb = newNebula.clone().lerp(newOuter, Math.random() * 0.5);
-                    nebColorAttr.array[j3] = mixedNeb.r;
-                    nebColorAttr.array[j3 + 1] = mixedNeb.g;
-                    nebColorAttr.array[j3 + 2] = mixedNeb.b;
-                }
-                nebColorAttr.needsUpdate = true;
-            });
-        });
-
         const clock = new THREE.Clock();
+        const activeFogDense = new THREE.Color();
+        const activeFogMist = new THREE.Color();
+        const activeStarColor = new THREE.Color();
+
+        let lastActiveIdx = -1;
 
         function animate() {
             requestAnimationFrame(animate);
             const elapsedTime = clock.getElapsedTime();
 
-            // Smooth mouse interpolation for 3D parallax
-            mouse.x += (mouse.targetX - mouse.x) * 0.04;
-            mouse.y += (mouse.targetY - mouse.y) * 0.04;
+            // Continuous hands-free 7-color rainbow progression cycle (~21 seconds full cycle)
+            const cycleDuration = 21.0;
+            const progress = (elapsedTime % cycleDuration) / cycleDuration;
+            const totalThemes = rainbowThemes.length;
+            const virtualIndex = progress * totalThemes;
+            const currentIndex = Math.floor(virtualIndex) % totalThemes;
+            const nextIndex = (currentIndex + 1) % totalThemes;
+            const blendFactor = virtualIndex - Math.floor(virtualIndex);
 
-            // Grand spiral galaxy continuous rotation
-            galaxyGroup.rotation.y = elapsedTime * 0.055;
+            // Smooth linear color interpolation between current and next rainbow stop
+            activeFogDense.copy(rainbowThemes[currentIndex].fogDense).lerp(rainbowThemes[nextIndex].fogDense, blendFactor);
+            activeFogMist.copy(rainbowThemes[currentIndex].fogMist).lerp(rainbowThemes[nextIndex].fogMist, blendFactor);
+            activeStarColor.copy(rainbowThemes[currentIndex].starColor).lerp(rainbowThemes[nextIndex].starColor, blendFactor);
 
-            // Interactive galaxy tilt following cursor
-            galaxyGroup.rotation.x = Math.PI * 0.28 + mouse.y * 0.25;
-            galaxyGroup.rotation.z = mouse.x * 0.2;
+            // Update UI indicators and ambient backdrop blur softly
+            if (currentIndex !== lastActiveIdx) {
+                lastActiveIdx = currentIndex;
+                const currentTheme = rainbowThemes[currentIndex];
+                statusBulb.style.backgroundColor = currentTheme.hex;
+                statusBulb.style.boxShadow = `0 0 14px ${currentTheme.hex}`;
+                ambientOrb.style.background = `radial-gradient(circle, ${currentTheme.glow} 0%, rgba(13, 10, 36, 0.04) 50%, transparent 75%)`;
 
-            // Pulsing galactic core accretion halo
-            coreHalo.scale.setScalar(1 + Math.sin(elapsedTime * 1.8) * 0.06);
+                // Update spectrum dot indicators
+                spectrumDots.forEach((dot, idx) => {
+                    if (idx === currentIndex) {
+                        dot.style.opacity = '1';
+                        dot.style.transform = 'scale(1.35)';
+                        dot.style.boxShadow = `0 0 10px ${currentTheme.hex}`;
+                    } else {
+                        dot.style.opacity = '0.3';
+                        dot.style.transform = 'scale(1)';
+                        dot.style.boxShadow = 'none';
+                    }
+                });
+            }
 
-            // Subtle camera drifting and tracking
-            camera.position.x = mouse.x * 3.5;
-            camera.position.y = 22 + mouse.y * 2.5;
+            // Real-time organic fog movement & color dissipation
+            const fogPosArray = fogGeometry.attributes.position.array;
+            const fogColArray = fogGeometry.attributes.color.array;
+
+            for (let f = 0; f < fogPuffCount; f++) {
+                const f3 = f * 3;
+                const mix = fogMixes[f];
+
+                // Undulating misty movement with slow sine wave current
+                fogPosArray[f3] += Math.sin(elapsedTime * 0.35 + f) * 0.025;
+                fogPosArray[f3 + 1] += Math.cos(elapsedTime * 0.28 + f) * 0.018;
+
+                // Color interpolation across the volumetric fog
+                fogColArray[f3] = activeFogDense.r + (activeFogMist.r - activeFogDense.r) * mix;
+                fogColArray[f3 + 1] = activeFogDense.g + (activeFogMist.g - activeFogDense.g) * mix;
+                fogColArray[f3 + 2] = activeFogDense.b + (activeFogMist.b - activeFogDense.b) * mix;
+            }
+            fogGeometry.attributes.position.needsUpdate = true;
+            fogGeometry.attributes.color.needsUpdate = true;
+
+            // Twinkling embedded stars shifting with the cosmic mist
+            const starColArray = starGeometry.attributes.color.array;
+            for (let s = 0; s < starCount; s++) {
+                const s3 = s * 3;
+                const twinkle = Math.sin(elapsedTime * 2.2 + starPhases[s]) * 0.3 + 0.7;
+
+                starColArray[s3] = activeStarColor.r * twinkle;
+                starColArray[s3 + 1] = activeStarColor.g * twinkle;
+                starColArray[s3 + 2] = activeStarColor.b * twinkle;
+            }
+            starGeometry.attributes.color.needsUpdate = true;
+
+            // Smooth parallax interaction
+            mouse.x += (mouse.targetX - mouse.x) * 0.035;
+            mouse.y += (mouse.targetY - mouse.y) * 0.035;
+
+            // Slow, majestic deep space drift
+            fogGroup.rotation.y = elapsedTime * 0.018;
+            fogGroup.rotation.x = Math.sin(elapsedTime * 0.012) * 0.08 + mouse.y * 0.12;
+            fogGroup.rotation.z = mouse.x * 0.1;
+
+            camera.position.x = mouse.x * 4.2;
+            camera.position.y = mouse.y * 3.0;
             camera.lookAt(0, 0, 0);
-
-            // Very slow drift for deep starfield
-            starfield.rotation.y = -elapsedTime * 0.008;
 
             renderer.render(scene, camera);
         }
