@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlTag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdGuard - Clone by AI</title>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        adguard: '#67b246',
+                        adguardDark: '#509033',
+                    },
+                    animation: {
+                        'fire-glow': 'fireGlow 1.5s infinite alternate',
+                    },
+                    keyframes: {
+                        fireGlow: {
+                            '0%': { boxShadow: '0 0 5px 0px rgba(103, 178, 70, 0.4)' },
+                            '100%': { boxShadow: '0 0 25px 10px rgba(103, 178, 70, 0.8)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans antialiased transition-colors duration-300">
+
+    <!-- Navigation -->
+    <nav class="flex items-center justify-between px-8 py-4 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
+        <div class="flex items-center gap-2">
+            <a href="AAA.html" class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-adguard text-3xl"></i>
+                <span class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">AdGuard <span class="text-xs text-gray-400 font-normal" data-i18n="navClone">Clone</span></span>
+            </a>
+        </div>
+        <div class="hidden md:flex gap-6 text-sm font-semibold text-gray-600 dark:text-gray-400">
+            <a href="products.html" class="hover:text-adguard transition-colors" data-i18n="navProducts">Products</a>
+            <a href="blogs.html" class="hover:text-adguard transition-colors" data-i18n="navBlog">Blog</a>
+            <a href="support.html" class="hover:text-adguard transition-colors" data-i18n="navSupport">Support</a>
+            <a href="partners.html" class="hover:text-adguard transition-colors" data-i18n="navPartners">Partners</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="#" class="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-adguard" data-i18n="navLogin">Log in</a>
+            
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none rounded-full text-sm p-2.5 transition-colors">
+                <i class="fa-solid fa-moon hidden dark:block"></i>
+                <i class="fa-solid fa-sun dark:hidden block"></i>
+            </button>
+
+            <!-- Language Dropdown -->
+            <div class="relative group z-50">
+                <button class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm font-semibold py-2 px-4 rounded-full transition-colors flex items-center gap-2">
+                    <span id="currentLangText">EN </span> <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                </button>
+                <div class="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <a href="#" onclick="setLanguage('en')" class="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-800 hover:text-adguard dark:hover:text-adguard rounded-t-xl transition-colors">English (EN)</a>
+                    <a href="#" onclick="setLanguage('fr')" class="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-800 hover:text-adguard dark:hover:text-adguard transition-colors">Français (FR)</a>
+                    <a href="#" onclick="setLanguage('ar')" class="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-gray-800 hover:text-adguard dark:hover:text-adguard rounded-b-xl transition-colors">العربية (AR)</a>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="max-w-7xl mx-auto px-8 py-16 md:py-24 flex flex-col md:flex-row items-center gap-12">
+        
+        <!-- Left Content -->
+        <div class="flex-1 space-y-8">
+            <div class="inline-flex items-center gap-2 bg-green-50 dark:bg-gray-800/50 text-adguard px-3 py-1 rounded-full text-sm font-semibold border border-green-100 dark:border-gray-700">
+                <i class="fa-solid fa-star text-yellow-400"></i>
+                <span data-i18n="reviews">20,160 user reviews - Excellent!</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight text-gray-900 dark:text-white">
+                <span data-i18n="heading1">Surf the Web ad-free and safely. </span><br/>
+                <span class="text-adguard" data-i18n="heading2">Shields up!</span>
+            </h1>
+            
+            <ul class="space-y-4 text-lg text-gray-600 dark:text-gray-400">
+                <li class="flex items-center gap-3">
+                    <i class="fa-solid fa-check text-adguard"></i>
+                    <span data-i18n="feat1">Blocks all kinds of ads</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <i class="fa-solid fa-check text-adguard"></i>
+                    <span data-i18n="feat2">Removes annoying web elements</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <i class="fa-solid fa-check text-adguard"></i>
+                    <span data-i18n="feat3">Saves traffic and speeds up page loading</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <i class="fa-solid fa-check text-adguard"></i>
+                    <span data-i18n="feat4">Works for browsers and apps</span>
+                </li>
+            </ul>
+
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <button class="bg-adguard hover:bg-adguardDark text-white text-lg font-bold py-4 px-8 rounded-full transition-all transform hover:-translate-y-1 animate-fire-glow" data-i18n="btnDownload">
+                    Download
+                </button>
+                <button class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 border-2 border-gray-200 dark:border-gray-700 text-lg font-bold py-4 px-8 rounded-full transition-all" data-i18n="btnInstall">
+                    How to install
+                </button>
+            </div>
+            <p class="text-xs text-gray-400 mt-2" data-i18n="disclaimer">By downloading the program you accept the terms of the License agreement</p>
+        </div>
+
+        <!-- Right Graphic / Mockup -->
+        <div class="flex-1 flex justify-center relative w-full">
+            <div class="absolute inset-0 bg-green-100 dark:bg-adguard/20 rounded-full blur-3xl opacity-50 transform -translate-x-10 translate-y-10 transition-colors duration-500"></div>
+            <div class="relative bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl p-8 w-full max-w-md z-10 transform rotate-2 hover:rotate-0 transition-all duration-500">
+                <div class="flex justify-between items-center mb-6 border-b dark:border-gray-700 pb-4">
+                    <h3 class="font-bold text-xl dark:text-white" data-i18n="cardTitle">AdGuard Protection</h3>
+                    <!-- تحويل الزر الثابت إلى زر تفاعلي بـ LTR ليحافظ على الحركة الصحيحة -->
+                    <button dir="ltr" onclick="toggleProtection()" id="toggleTrack" class="w-12 h-6 bg-adguard rounded-full relative cursor-pointer transition-colors duration-300 ease-in-out focus:outline-none">
+                        <div id="toggleCircle" class="w-4 h-4 bg-white rounded-full absolute left-1 top-1 shadow-sm transition-transform duration-300 ease-in-out translate-x-6"></div>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 dark:text-gray-400" data-i18n="stat1">Ads blocked today</span>
+                        <span class="font-bold text-adguard">1,204</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 dark:text-gray-400" data-i18n="stat2">Trackers blocked</span>
+                        <span class="font-bold text-adguard">342</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 dark:text-gray-400" data-i18n="stat3">Data saved</span>
+                        <span class="font-bold text-adguard">14.5 MB</span>
+                    </div>
+                </div>
+                <!-- إضافة IDs لتحديث الحالة عند النقر -->
+                <div id="statusContainer" class="mt-8 bg-gray-50 dark:bg-gray-900 p-4 rounded-xl flex items-center justify-center gap-3 transition-colors duration-300">
+                    <i id="statusIcon" class="fa-solid fa-shield-check text-adguard text-2xl transition-colors duration-300"></i>
+                    <span id="statusText" class="font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300" data-i18n="statusActive">Protection is Active</span>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- إضافة السكريبت المسؤول عن الحركة وتغيير الحالات واللغات -->
+    <script>
+        // قاموس اللغات (Translations Dictionary)
+        const translations = {
+            en: {
+                navClone: "Clone",
+                navProducts: "Products",
+                navBlog: "Blog",
+                navSupport: "Support",
+                navPartners: "Partners",
+                navLogin: "Log in",
+                reviews: "20,160 user reviews - Excellent!",
+                heading1: "Surf the Web ad-free and safely.",
+                heading2: "Shields up!",
+                feat1: "Blocks all kinds of ads",
+                feat2: "Removes annoying web elements",
+                feat3: "Saves traffic and speeds up page loading",
+                feat4: "Works for browsers and apps",
+                btnDownload: "Download",
+                btnInstall: "How to install",
+                disclaimer: "By downloading the program you accept the terms of the License agreement",
+                cardTitle: "AdGuard Protection",
+                stat1: "Ads blocked today",
+                stat2: "Trackers blocked",
+                stat3: "Data saved",
+                statusActive: "Protection is Active",
+                statusDisabled: "Protection is Disabled",
+                langBtn: "EN "
+            },
+            fr: {
+                navClone: "Clone",
+                navProducts: "Produits",
+                navBlog: "Blog",
+                navSupport: "Support",
+                navPartners: "Partenaires",
+                navLogin: "Connexion",
+                reviews: "20 160 avis d'utilisateurs - Excellent !",
+                heading1: "Surfez sans pub et en sécurité.",
+                heading2: "Boucliers activés !",
+                feat1: "Bloque toutes sortes de publicités",
+                feat2: "Supprime les éléments Web ennuyeux",
+                feat3: "Économise le trafic et accélère le chargement",
+                feat4: "Fonctionne pour navigateurs et applications",
+                btnDownload: "Télécharger",
+                btnInstall: "Comment installer",
+                disclaimer: "En téléchargeant le programme, vous acceptez les termes du contrat",
+                cardTitle: "Protection AdGuard",
+                stat1: "Pubs bloquées",
+                stat2: "Traqueurs bloqués",
+                stat3: "Données économisées",
+                statusActive: "La protection est active",
+                statusDisabled: "La protection est désactivée",
+                langBtn: "FR "
+            },
+            ar: {
+                navClone: "نسخة",
+                navProducts: "المنتجات",
+                navBlog: "المدونة",
+                navSupport: "الدعم",
+                navPartners: "الشركاء",
+                navLogin: "تسجيل الدخول",
+                reviews: "20,160 تقييم مستخدم - ممتاز!",
+                heading1: "تصفح الويب بدون إعلانات وبأمان.",
+                heading2: "دروعنا جاهزة!",
+                feat1: "يحظر جميع أنواع الإعلانات",
+                feat2: "يزيل عناصر الويب المزعجة",
+                feat3: "يوفر استهلاك البيانات ويسرع التحميل",
+                feat4: "يعمل مع المتصفحات والتطبيقات",
+                btnDownload: "تحميل",
+                btnInstall: "كيفية التثبيت",
+                disclaimer: "بتنزيل البرنامج فإنك تقبل شروط اتفاقية الترخيص",
+                cardTitle: "حماية AdGuard",
+                stat1: "إعلانات تم حظرها",
+                stat2: "متتبعات تم حظرها",
+                stat3: "بيانات تم توفيرها",
+                statusActive: "الحماية نشطة",
+                statusDisabled: "الحماية معطلة",
+                langBtn: "AR "
+            }
+        };
+
+        let currentLang = 'en';
+        let isProtectionActive = true;
+
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Cache DOM elements for better performance
+        const domElements = {
+            htmlTag: document.getElementById('htmlTag'),
+            dropdownMenu: document.querySelector('.group > div'),
+            i18nList: document.querySelectorAll('[data-i18n]'),
+            currentLangText: document.getElementById('currentLangText'),
+            track: document.getElementById('toggleTrack'),
+            circle: document.getElementById('toggleCircle'),
+            statusIcon: document.getElementById('statusIcon'),
+            statusContainer: document.getElementById('statusContainer'),
+            statusText: document.getElementById('statusText')
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // تغيير اتجاه الصفحة (RTL/LTR)
+            if (lang === 'ar') {
+                domElements.htmlTag.dir = 'rtl';
+                domElements.htmlTag.lang = 'ar';
+                // إصلاح اتجاه القائمة المنسدلة
+                domElements.dropdownMenu.classList.replace('right-0', 'left-0');
+            } else {
+                domElements.htmlTag.dir = 'ltr';
+                domElements.htmlTag.lang = lang;
+                // إصلاح اتجاه القائمة المنسدلة
+                domElements.dropdownMenu.classList.replace('left-0', 'right-0');
+            }
+
+            // تحديث جميع النصوص التي تحتوي على بيانات الترجمة
+            domElements.i18nList.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const translation = translations[lang][key];
+                if (translation) {
+                    el.innerText = translation;
+                }
+            });
+
+            // تحديث زر اللغة
+            domElements.currentLangText.innerText = translations[lang].langBtn;
+            
+            // تحديث حالة الحماية لتعكس اللغة الجديدة
+            updateStatusText();
+        }
+
+        function toggleProtection() {
+            isProtectionActive = !isProtectionActive;
+
+            if (isProtectionActive) {
+                // حالة التشغيل (ON)
+                domElements.track.className = 'w-12 h-6 bg-adguard rounded-full relative cursor-pointer transition-colors duration-300 ease-in-out focus:outline-none';
+                domElements.circle.className = 'w-4 h-4 bg-white rounded-full absolute left-1 top-1 shadow-sm transition-transform duration-300 ease-in-out translate-x-6';
+                domElements.statusIcon.className = 'fa-solid fa-shield-check text-adguard text-2xl transition-colors duration-300';
+                domElements.statusContainer.className = 'mt-8 bg-gray-50 dark:bg-gray-900 p-4 rounded-xl flex items-center justify-center gap-3 transition-colors duration-300';
+                domElements.statusText.className = 'font-semibold text-gray-700 dark:text-gray-300 transition-colors duration-300';
+            } else {
+                // حالة الإيقاف (OFF)
+                domElements.track.className = 'w-12 h-6 bg-gray-300 dark:bg-gray-600 rounded-full relative cursor-pointer transition-colors duration-300 ease-in-out focus:outline-none';
+                domElements.circle.className = 'w-4 h-4 bg-white rounded-full absolute left-1 top-1 shadow-sm transition-transform duration-300 ease-in-out translate-x-0';
+                domElements.statusIcon.className = 'fa-solid fa-shield-xmark text-red-500 text-2xl transition-colors duration-300';
+                domElements.statusContainer.className = 'mt-8 bg-red-50 dark:bg-red-900/30 p-4 rounded-xl flex items-center justify-center gap-3 transition-colors duration-300';
+                domElements.statusText.className = 'font-semibold text-red-700 dark:text-red-400 transition-colors duration-300';
+            }
+            
+            updateStatusText();
+        }
+
+        function updateStatusText() {
+            domElements.statusText.innerText = isProtectionActive 
+                ? translations[currentLang].statusActive 
+                : translations[currentLang].statusDisabled;
+        }
+    </script>
+</body>
+</html>
